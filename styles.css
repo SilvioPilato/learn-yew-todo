@@ -1,0 +1,60 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin: auto;
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #0A0908;
+}
+
+.title {
+    text-align: center;
+    color: #6A8E7F;
+    font-style: italic;
+}
+
+.edit-title {
+    color: #2660A4;
+    font-size: 1.2em;
+}
+
+.edit-textbar {
+    width: 100%;
+    resize: none;
+}
+
+.edit-createbutton {
+    float: right;
+}
+
+.todo-mainbar {
+    min-height: 8em;
+    border: 1px solid rgb(10, 9, 8, 0.4);
+    border-radius: 2px;
+    margin-top: 1em;
+}
+
+.todo-index {
+    text-align: left;
+}
+
+.todo-text {
+    text-align: justify;
+    font-size: 0.9em;
+    margin-top: 0.4em;
+}
+
+.todo-content {
+    margin: 0.2em;
+}
+
+.mainbar {
+    width: 40%;
+}
+
+body {
+    margin: 0;
+    background: #EDF7F6;
+    text-align: center;
+}
