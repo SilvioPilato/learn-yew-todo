@@ -10,11 +10,16 @@ enum Msg {
     DoneOne(usize),
 }
 
+pub struct Todo {
+    text: String,
+    done: bool,
+}
+
 struct Model {
     // `ComponentLink` is like a reference to a component.
     // It can be used to send messages to the component
     link: ComponentLink<Self>,
-    todos: Vec<String>,
+    todos: Vec<Todo>,
 }
 
 impl Component for Model {
@@ -36,7 +41,7 @@ impl Component for Model {
                         return false;
                     }
                     false => {
-                        self.todos.push(data);
+                        self.todos.push(Todo { text: data, done: false});
                         return true;
                     }
                 }
@@ -46,7 +51,8 @@ impl Component for Model {
                 return true;
             },
             Msg::DoneOne(index) => {
-                return false;
+                self.todos.get_mut(index).unwrap().done = true;
+                return true;
             }
         }
     }
@@ -64,7 +70,7 @@ impl Component for Model {
             <div class="main">
                 <Title text={"A Rusty todo app"} />
                 <EditBar on_new=cb />
-                {for self.todos.iter().enumerate().map(|(index, text)| get_todo_component(index, String::from(text), &self.link))}
+                {for self.todos.iter().enumerate().map(|(index, todo)| get_todo_component(index, &todo, &self.link))}
             </div>
         }
     }
@@ -74,9 +80,10 @@ fn main() {
     yew::start_app::<Model>();
 }
 
-fn get_todo_component(index: usize, text: String, link: &ComponentLink<Model>) -> Html {
+fn get_todo_component(index: usize, todo: &Todo, link: &ComponentLink<Model>) -> Html {
     let del_cb = link.callback(Msg::RemoveOne);
+    let done_cb = link.callback(Msg::DoneOne);
     html! {
-        <TodoBar text={text} index={index} on_delete=del_cb/>
+        <TodoBar text={String::from(&todo.text)} done={todo.done} index={index} on_delete=del_cb on_done=done_cb/>
     }
 }

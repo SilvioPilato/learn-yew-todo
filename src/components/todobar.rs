@@ -13,6 +13,8 @@ pub struct TodoProps {
     #[prop_or_default]
     pub text: String,
     #[prop_or_default]
+    pub done: bool,
+    #[prop_or_default]
     pub index: usize,
     #[prop_or_default]
     pub on_delete: Callback<usize>,
@@ -40,11 +42,11 @@ impl Component for TodoBar {
 
     fn update(&mut self, message: Self::Message) -> ShouldRender { 
         match message {
-            Remove => {
+            Msg::Remove => {
                 self.props.on_delete.emit(self.props.index);
                 return false;
             },
-            Done => {
+            Msg::Done => {
                 self.props.on_done.emit(self.props.index);
                 return false;
             }
@@ -59,19 +61,20 @@ impl Component for TodoBar {
         return false;
     }
 
-    fn view(&self) -> Html { 
+    fn view(&self) -> Html {
+        let textClass = (self.props.done).then(||"text-disabled").unwrap_or("");
         html!{
             <div class="todo-mainbar mainbar">
                 <p class="todo-index edit-title todo-content todo-side">{format!("#{}",&self.props.index)}</p>
                 <div class="todo-text-div">
-                    <p class="todo-text todo-content">{&self.props.text}</p>
+                    <p class=format!("todo-text todo-content {}", textClass)>{&self.props.text}</p>
                 </div>
-                <div onclick=self.link.callback(|_| Msg::Done) class="todo-side todo-conficon grow">
+                <span onclick=self.link.callback(|_| Msg::Done) class="todo-side todo-conficon grow">
                     { Icon::new(IconKind::CheckCircleFill) }
-                </div>
-                <div onclick=self.link.callback(|_| Msg::Remove) class="todo-side todo-delicon grow">
+                </span>
+                <span onclick=self.link.callback(|_| Msg::Remove) class="todo-side todo-delicon grow">
                     { Icon::new(IconKind::XCircleFill) }
-                </div>
+                </span>
             </div>
         }
     }
