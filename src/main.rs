@@ -5,7 +5,9 @@ use components::todobar::TodoBar;
 use yew::prelude::*;
 
 enum Msg {
-    CreateNew(String)
+    CreateNew(String),
+    RemoveOne(usize),
+    DoneOne(usize),
 }
 
 struct Model {
@@ -38,6 +40,13 @@ impl Component for Model {
                         return true;
                     }
                 }
+            },
+            Msg::RemoveOne(index) => {
+                self.todos.remove(index);
+                return true;
+            },
+            Msg::DoneOne(index) => {
+                return false;
             }
         }
     }
@@ -55,7 +64,7 @@ impl Component for Model {
             <div class="main">
                 <Title text={"A Rusty todo app"} />
                 <EditBar on_new=cb />
-                {for self.todos.iter().enumerate().map(|(index, text)| get_todo_component(index, String::from(text)))}
+                {for self.todos.iter().enumerate().map(|(index, text)| get_todo_component(index, String::from(text), &self.link))}
             </div>
         }
     }
@@ -65,8 +74,9 @@ fn main() {
     yew::start_app::<Model>();
 }
 
-fn get_todo_component(index: usize, text: String) -> Html {
+fn get_todo_component(index: usize, text: String, link: &ComponentLink<Model>) -> Html {
+    let del_cb = link.callback(Msg::RemoveOne);
     html! {
-        <TodoBar text={text} index={index}/>
+        <TodoBar text={text} index={index} on_delete=del_cb/>
     }
 }

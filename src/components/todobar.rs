@@ -4,6 +4,7 @@ use yew::html;
 use yew::Component;
 use yew::ComponentLink;
 use yew::Properties;
+use yew::Callback;
 use yew_octicons::Icon;
 use yew_octicons::IconKind;
 
@@ -13,6 +14,15 @@ pub struct TodoProps {
     pub text: String,
     #[prop_or_default]
     pub index: usize,
+    #[prop_or_default]
+    pub on_delete: Callback<usize>,
+    #[prop_or_default]
+    pub on_done: Callback<usize>,
+}
+
+pub enum Msg {
+    Done,
+    Remove,
 }
 
 pub struct TodoBar {
@@ -21,15 +31,24 @@ pub struct TodoBar {
 }
 
 impl Component for TodoBar {
-    type Message = ();
+    type Message = Msg;
     type Properties = TodoProps;
 
     fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self { 
         TodoBar { link, props }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender { 
-        false
+    fn update(&mut self, message: Self::Message) -> ShouldRender { 
+        match message {
+            Remove => {
+                self.props.on_delete.emit(self.props.index);
+                return false;
+            },
+            Done => {
+                self.props.on_done.emit(self.props.index);
+                return false;
+            }
+        }
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender  {
@@ -47,8 +66,11 @@ impl Component for TodoBar {
                 <div class="todo-text-div">
                     <p class="todo-text todo-content">{&self.props.text}</p>
                 </div>
-                <div class="todo-side todo-delicon">
-                    { Icon::new(IconKind::Trashcan) }
+                <div onclick=self.link.callback(|_| Msg::Done) class="todo-side todo-conficon grow">
+                    { Icon::new(IconKind::CheckCircleFill) }
+                </div>
+                <div onclick=self.link.callback(|_| Msg::Remove) class="todo-side todo-delicon grow">
+                    { Icon::new(IconKind::XCircleFill) }
                 </div>
             </div>
         }

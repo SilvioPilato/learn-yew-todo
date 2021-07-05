@@ -68,9 +68,16 @@
     color: #D81159;
 }
 
+.todo-conficon {
+    color: #7D8CC4;
+}
+
 .mainbar {
     width: 50%;
 }
+
+.grow { transition: all .2s ease-in-out; }
+.grow:hover { transform: scale(1.2); }
 
 body {
     margin: 0;
