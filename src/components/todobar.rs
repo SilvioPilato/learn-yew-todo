@@ -4,6 +4,8 @@ use yew::html;
 use yew::Component;
 use yew::ComponentLink;
 use yew::Properties;
+use yew_octicons::Icon;
+use yew_octicons::IconKind;
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct TodoProps {
@@ -41,8 +43,13 @@ impl Component for TodoBar {
     fn view(&self) -> Html { 
         html!{
             <div class="todo-mainbar mainbar">
-                <p class="todo-index edit-title todo-content">{format!("#{}",&self.props.index)}</p>
-                <p class="todo-text todo-content">{&self.props.text}</p>
+                <p class="todo-index edit-title todo-content todo-side">{format!("#{}",&self.props.index)}</p>
+                <div class="todo-text-div">
+                    <p class="todo-text todo-content">{&self.props.text}</p>
+                </div>
+                <div class="todo-side todo-delicon">
+                    { Icon::new(IconKind::Trashcan) }
+                </div>
             </div>
         }
     }

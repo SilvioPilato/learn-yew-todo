@@ -53,7 +53,7 @@ impl Component for EditBar {
         html!{
             <div class="edit-mainbar mainbar">
                 <h2 class="edit-title">{"Create a new TODO element"}</h2>
-                <textarea class="edit-textbar" oninput=self.link.callback(|data: InputData | Msg::TextChanged(data.value)) type="text" id="editbar-text" name="editbar-text"/>
+                <input class="edit-textbar" oninput=self.link.callback(|data: InputData | Msg::TextChanged(data.value)) type="text" id="editbar-text" name="editbar-text"/>
                 <button class="edit-createbutton" onclick=self.link.callback(|_| Msg::CreateNew)>{ "Create" }</button>
             </div>
         }
